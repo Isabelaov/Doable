@@ -6,6 +6,7 @@ import { ContainerStyles, TextStyles } from '../assets/styles';
 import { Input, Button } from '../components';
 import { RootStack } from '../navigation/rootStack';
 import { loginValidationSchema } from '../utils/validation/login.validation';
+import { useUser } from '../hooks/useUser';
 
 type NavigationProp = NativeStackNavigationProp<RootStack, 'Login'>;
 
@@ -14,15 +15,24 @@ interface Props {
 }
 
 export const LoginScreen = ({ navigation }: Props) => {
+  const { login } = useUser();
+  const handleLogin = async (values: { email: string; password: string }) => {
+    await login({ ...values });
+    navigation.navigate('Home');
+  };
+
   return (
     <View style={ContainerStyles.formContainer}>
       <Text style={TextStyles.title}>
         Welcome <Text style={TextStyles.titleSecondary}>Back!</Text>
       </Text>
       <Formik
-        initialValues={{ email: '', password: '' }}
+        initialValues={{
+          email: 'jane.doe@email.com',
+          password: 'Password12.3!',
+        }}
         validationSchema={loginValidationSchema}
-        onSubmit={() => console.log('uwu')}>
+        onSubmit={handleLogin}>
         {({
           handleChange,
           handleBlur,
@@ -64,19 +74,3 @@ export const LoginScreen = ({ navigation }: Props) => {
     </View>
   );
 };
-
-// const { login, loading } = useAuth();
-// const [submitting, setSubmitting] = useState(false);
-
-// const handleLogin = async (values: { email: string; password: string }) => {
-//   setSubmitting(true);
-//   try {
-//     await login(values.email, values.password);
-
-//     navigation.replace('Login', { screen: '' });
-//   } catch (error: any) {
-//     Alert.alert('Error', String(error));
-//   } finally {
-//     setSubmitting(false);
-//   }
-// };

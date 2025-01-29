@@ -1,12 +1,13 @@
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { Formik } from 'formik';
-import React, { useState } from 'react';
-import { Alert, View, Text, ActivityIndicator } from 'react-native';
+import React from 'react';
+import { View, Text, ActivityIndicator } from 'react-native';
 import { ContainerStyles, TextStyles } from '../assets/styles';
 import { Button, Input } from '../components';
 import { RootStack } from '../navigation/rootStack';
 import { colors } from '../assets/colors';
 import { registerValidationSchema } from '../utils/validation/register.validation';
+import { useUser } from '../hooks/useUser';
 
 type NavigationProp = NativeStackNavigationProp<RootStack, 'Register'>;
 
@@ -15,21 +16,16 @@ interface Props {
 }
 
 export const RegisterScreen = ({ navigation }: Props) => {
-  // const { register, loading } = useAuth();
-  const [submitting, setSubmitting] = useState(false);
+  const { register, submitting } = useUser();
 
-  const handleRegister = async (values: any) => {
-    setSubmitting(true);
-    try {
-      // await register(values);
-      console.log({ values });
-
-      navigation.navigate('Login');
-    } catch (error: any) {
-      Alert.alert('Error', String(error));
-    } finally {
-      setSubmitting(false);
-    }
+  const handleRegister = async (values: {
+    name: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+  }) => {
+    await register({ ...values });
+    navigation.navigate('Login');
   };
 
   return (
@@ -47,7 +43,6 @@ export const RegisterScreen = ({ navigation }: Props) => {
             email: '',
             password: '',
             confirmPassword: '',
-            phone: '',
           }}
           validationSchema={registerValidationSchema}
           onSubmit={handleRegister}>
