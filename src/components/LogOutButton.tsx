@@ -1,8 +1,8 @@
 import React from 'react';
 import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
-import { CustomIcon } from './Icon';
 import { Loading } from './Loading';
 import { useUser } from '../hooks/useUser';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export const LogoutButton: React.FC<TouchableOpacityProps> = ({
   disabled = false,
@@ -15,11 +15,7 @@ export const LogoutButton: React.FC<TouchableOpacityProps> = ({
       disabled={disabled || submitting}
       onPress={logout}
       {...rest}>
-      {submitting ? (
-        <Loading />
-      ) : (
-        <CustomIcon family="AntDesign" name="logout" size={30} />
-      )}
+      {submitting ? <Loading /> : <Icon name="logout" size={30} />}
     </TouchableOpacity>
   );
 };

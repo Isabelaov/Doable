@@ -1,4 +1,9 @@
 {
   "extends": "@react-native/typescript-config/tsconfig.json",
-  "include": ["env.d.ts", "src/**/*"]
+  "include": ["env.d.ts", "src/**/*"],
+  "compilerOptions": {
+    "paths": {
+   "react": [ "./node_modules/@types/react" ]
+ }
+  }
 }
