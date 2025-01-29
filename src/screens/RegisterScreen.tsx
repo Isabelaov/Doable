@@ -24,7 +24,8 @@ export const RegisterScreen = ({ navigation }: Props) => {
     password: string;
     confirmPassword: string;
   }) => {
-    await register({ ...values });
+    const { confirmPassword, ...data } = values;
+    await register({ ...data });
     navigation.navigate('Login');
   };
 

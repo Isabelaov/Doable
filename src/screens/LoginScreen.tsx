@@ -15,7 +15,7 @@ interface Props {
 }
 
 export const LoginScreen = ({ navigation }: Props) => {
-  const { login } = useUser();
+  const { login, submitting } = useUser();
   const handleLogin = async (values: { email: string; password: string }) => {
     await login({ ...values });
     navigation.navigate('Home');
@@ -60,7 +60,11 @@ export const LoginScreen = ({ navigation }: Props) => {
             />
 
             <View style={ContainerStyles.bySide}>
-              <Button text="Log In" onPress={() => handleSubmit()} />
+              <Button
+                text="Log In"
+                onPress={() => handleSubmit()}
+                isLoading={submitting}
+              />
 
               <Button
                 text="Register"
