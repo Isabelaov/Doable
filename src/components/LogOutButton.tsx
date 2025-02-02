@@ -8,12 +8,12 @@ export const LogoutButton: React.FC<TouchableOpacityProps> = ({
   disabled = false,
   ...rest
 }) => {
-  const { logout, submitting } = useUser();
+  const { logoutUser, submitting } = useUser();
 
   return (
     <TouchableOpacity
       disabled={disabled || submitting}
-      onPress={logout}
+      onPress={logoutUser}
       {...rest}>
       {submitting ? <Loading /> : <Icon name="logout" size={30} />}
     </TouchableOpacity>

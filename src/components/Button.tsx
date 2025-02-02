@@ -28,7 +28,7 @@ export const Button: React.FC<ButtonProps> = ({
       disabled={disabled || isLoading}
       {...rest}>
       {isLoading ? (
-        <Loading />
+        <Loading color="ccc" />
       ) : (
         <Text style={TextStyles.buttonText}>{text}</Text>
       )}
