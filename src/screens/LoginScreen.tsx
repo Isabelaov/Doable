@@ -15,11 +15,7 @@ interface Props {
 }
 
 export const LoginScreen = ({ navigation }: Props) => {
-  const { login, submitting } = useUser();
-  const handleLogin = async (values: { email: string; password: string }) => {
-    await login({ ...values });
-    navigation.navigate('Home');
-  };
+  const { loginUser, submitting } = useUser();
 
   return (
     <View style={ContainerStyles.formContainer}>
@@ -28,11 +24,11 @@ export const LoginScreen = ({ navigation }: Props) => {
       </Text>
       <Formik
         initialValues={{
-          email: 'jane.doe@email.com',
-          password: 'Password12.3!',
+          email: '',
+          password: '',
         }}
         validationSchema={loginValidationSchema}
-        onSubmit={handleLogin}>
+        onSubmit={loginUser}>
         {({
           handleChange,
           handleBlur,
