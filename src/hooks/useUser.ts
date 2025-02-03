@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { UserController } from '../../core/infrastructure/user.controller';
+import { UserController } from '../../core/infrastructure/controllers/user.controller';
 import { useNavigation } from '@react-navigation/native';
 import { NavigationProps } from '../navigation/rootStack';
 import { useDispatch } from 'react-redux';

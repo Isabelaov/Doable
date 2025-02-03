@@ -1,4 +1,4 @@
-import { UserRepository } from '../domain/user.repository';
+import { UserRepository } from '../domain/repositories/user.repository';
 
 export const createUser = (repository: UserRepository, data: any) => {
   return repository.register(data);

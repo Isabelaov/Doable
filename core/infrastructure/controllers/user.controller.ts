@@ -1,5 +1,5 @@
-import { UserRepositoryImp } from './user.implementation';
-import { createUser, loginUser } from '../useCases/user.usecases';
+import { UserRepositoryImp } from '../implemenations/user.implementation';
+import { createUser, loginUser } from '../../useCases/user.usecases';
 import { Alert } from 'react-native';
 
 const userRepository = new UserRepositoryImp();
