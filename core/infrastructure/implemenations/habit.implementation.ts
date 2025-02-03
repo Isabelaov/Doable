@@ -65,4 +65,10 @@ export class HabitRepositoryImp implements HabitRepository {
   async getOne(id: number) {
     console.log(id);
   }
+
+  async delete(id: number) {
+    console.log({ id });
+
+    return 'yes';
+  }
 }

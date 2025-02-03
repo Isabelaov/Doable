@@ -9,6 +9,7 @@ export class UserController {
     try {
       return await createUser(userRepository, data);
     } catch (err) {
+      console.log(err);
       Alert.alert(String(err));
     }
   }
@@ -17,6 +18,7 @@ export class UserController {
     try {
       return await loginUser(userRepository, data);
     } catch (err) {
+      console.log(err);
       Alert.alert(String(err));
     }
   }

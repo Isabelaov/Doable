@@ -1,5 +1,5 @@
 export interface Habit {
-  id: Number;
+  id: number;
   name: string;
   description?: string;
   frequency: 'daily' | 'weekly' | 'monthly';
