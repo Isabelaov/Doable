@@ -5,7 +5,7 @@ import {
   editHabit,
   getHabits,
 } from '../../useCases/habit.usecases';
-import { HabitRepositoryImp } from '../implemenations/habit.implementation';
+import { HabitRepositoryImp } from '../implementations/habit.implementation';
 
 const habitRepository = new HabitRepositoryImp();
 

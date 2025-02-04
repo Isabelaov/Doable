@@ -1,4 +1,4 @@
-import { UserRepositoryImp } from '../implemenations/user.implementation';
+import { UserRepositoryImp } from '../implementations/user.implementation';
 import { createUser, loginUser } from '../../useCases/user.usecases';
 import { Alert } from 'react-native';
 

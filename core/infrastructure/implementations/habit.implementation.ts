@@ -4,6 +4,7 @@ import SQLite, {
   Transaction,
 } from 'react-native-sqlite-storage';
 import { HabitRepository } from '../../domain/repositories/habit.repository';
+import { Habit } from '../../domain/entities/habit.entity';
 
 export class HabitRepositoryImp implements HabitRepository {
   private database: SQLiteDatabase;
@@ -58,8 +59,25 @@ export class HabitRepositoryImp implements HabitRepository {
   }
 
   async getAll() {
-    console.log('get all');
-    return [];
+    return new Promise((resolve, reject) => {
+      this.database.transaction((tx: Transaction) => {
+        tx.executeSql(
+          'SELECT * FROM habits',
+          [],
+          (_: Transaction, { rows }: any) => {
+            const habits: Habit[] = [];
+            for (let i = 0; i < rows.length; i++) {
+              habits.push(rows.item(i));
+            }
+            resolve(habits as []);
+          },
+          (_: Transaction, error: SQLError) => {
+            reject(new Error(error.message));
+            return false;
+          },
+        );
+      });
+    });
   }
 
   async getOne(id: number) {
