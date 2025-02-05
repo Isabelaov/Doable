@@ -6,11 +6,12 @@ import {
   getHabits,
 } from '../../useCases/habit.usecases';
 import { HabitRepositoryImp } from '../implementations/habit.implementation';
+import { HabitReq } from '../../domain/request/habit.request';
 
 const habitRepository = new HabitRepositoryImp();
 
 export class HabitController {
-  static async create(data: any) {
+  static async create(data: HabitReq) {
     try {
       return await createHabit(habitRepository, data);
     } catch (error) {
@@ -19,7 +20,7 @@ export class HabitController {
     }
   }
 
-  static async edit(data: any) {
+  static async edit(data: Partial<HabitReq>) {
     try {
       return await editHabit(habitRepository, data);
     } catch (error) {
