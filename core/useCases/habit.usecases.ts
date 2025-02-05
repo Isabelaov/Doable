@@ -7,9 +7,10 @@ export const createHabit = (repository: HabitRepository, data: HabitReq) => {
 
 export const editHabit = (
   repository: HabitRepository,
-  data: Partial<HabitReq>,
+  data: HabitReq,
+  id: number,
 ) => {
-  return repository.edit(data);
+  return repository.edit(data, id);
 };
 
 export const getHabits = (repository: HabitRepository) => {

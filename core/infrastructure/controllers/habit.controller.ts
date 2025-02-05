@@ -20,9 +20,9 @@ export class HabitController {
     }
   }
 
-  static async edit(data: Partial<HabitReq>) {
+  static async edit(data: HabitReq, id: number) {
     try {
-      return await editHabit(habitRepository, data);
+      return await editHabit(habitRepository, data, id);
     } catch (error) {
       console.log(error);
       Alert.alert(String(error));

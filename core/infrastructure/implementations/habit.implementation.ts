@@ -5,9 +5,10 @@ import SQLite, {
 } from 'react-native-sqlite-storage';
 import { HabitRepository } from '../../domain/repositories/habit.repository';
 import { Habit } from '../../domain/entities/habit.entity';
+import { HabitReq } from '../../domain/request/habit.request';
 
 export class HabitRepositoryImp implements HabitRepository {
-  private database: SQLiteDatabase;
+  private database!: SQLiteDatabase;
   init = this.initDb();
 
   private async initDb() {
@@ -54,8 +55,8 @@ export class HabitRepositoryImp implements HabitRepository {
     });
   }
 
-  async edit(data: any) {
-    console.log(data);
+  async edit(data: HabitReq, id: number) {
+    console.log({ data, id });
   }
 
   async getAll() {
