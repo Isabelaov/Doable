@@ -1,5 +1,5 @@
-import {StyleSheet} from 'react-native';
-import {colors} from '../colors';
+import { StyleSheet } from 'react-native';
+import { colors } from '../colors';
 
 export const TextStyles = StyleSheet.create({
   error: {
@@ -34,7 +34,11 @@ export const TextStyles = StyleSheet.create({
   },
   normal: {
     color: 'black',
-    fontSize: 20,
+    fontSize: 17,
+  },
+  time: {
+    fontSize: 17,
+    marginLeft: 5,
   },
   graph: {
     color: colors.secondary,
