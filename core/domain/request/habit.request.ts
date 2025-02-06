@@ -1,6 +1,8 @@
+import { Frequencies } from '../../enums/frequency.enum';
+
 export interface HabitReq {
   name: string;
   description?: string;
-  frequency: 'daily' | 'weekly' | 'monthly';
+  frequency: Frequencies;
   reminderTime: string;
 }

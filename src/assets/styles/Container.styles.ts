@@ -21,6 +21,14 @@ export const ContainerStyles = StyleSheet.create({
     alignContent: 'space-between',
     width: '100%',
   },
+  next: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginHorizontal: 5,
+    marginVertical: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   buttonEnd: {
     position: 'absolute',
     right: 5,

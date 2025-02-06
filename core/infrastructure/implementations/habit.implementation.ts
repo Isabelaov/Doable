@@ -23,28 +23,24 @@ export class HabitRepositoryImp implements HabitRepository {
           id INTEGER PRIMARY KEY,
           name TEXT NOT NULL,
           description TEXT,
-          frequency TEXT,
-          reminderTime TEXT,
+          frequency TEXT NOT NULL,
+          reminderTime TEXT NOT NULL,
           createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
           )`);
       });
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      console.error({ ...error });
     }
   }
 
-  async create(data: any) {
-    return new Promise((resolve, reject) => {
+  async create(data: HabitReq) {
+    return new Promise<void>((resolve, reject) => {
       this.database.transaction((tx: Transaction) => {
         tx.executeSql(
           'INSERT INTO Habits (name, description, frequency, reminderTime) VALUES ( ?, ?, ?, ?)',
           [data.name, data.description, data.frequency, data.reminderTime],
           (_: Transaction) => {
-            resolve({
-              status: 201,
-              data,
-              message: 'Habit created successfully!',
-            });
+            resolve();
           },
           (_: Transaction, error: SQLError) => {
             reject(new Error(error.message));

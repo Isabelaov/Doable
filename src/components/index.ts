@@ -3,3 +3,7 @@ export * from './Input';
 export * from './Loading';
 export * from './AddButton';
 export * from './HabitModal';
+export * from './FrequencyPicker';
+export * from './Anchor';
+export * from './TimePicker';
+export * from './CancelButton';

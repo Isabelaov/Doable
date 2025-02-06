@@ -7,18 +7,11 @@ import { HabitReq } from '../../core/domain/request/habit.request';
 import { Alert, ModalProps } from 'react-native';
 import { RootStack } from '../navigation/rootStack';
 import { useNavigation } from '@react-navigation/native';
-import { Habit } from '../../core/domain/entities/habit.entity';
 
 export type ItemModalProps = ModalProps & {
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
   habitId: number | undefined | null;
   setHabitId: React.Dispatch<React.SetStateAction<number | undefined>>;
-};
-
-const parseHabit = (habit: Habit): HabitReq => {
-  return {
-    ...habit,
-  };
 };
 
 export const useHabit = () => {
@@ -37,10 +30,13 @@ export const useHabit = () => {
       } else {
         await HabitController.create(habit);
       }
+      Alert.alert('Habit created');
+      await loadHabits();
     } catch (error) {
       console.error(error);
     } finally {
       setLoading(false);
+      setModalVisible(false);
     }
   };
 
@@ -48,10 +44,10 @@ export const useHabit = () => {
     try {
       setLoading(true);
       const res = await HabitController.getAll();
+      console.log('habits fetched', res);
 
       if (res) {
-        const parsed = JSON.parse(res);
-        dispatch(load(parsed));
+        dispatch(load(res));
       }
     } catch (error) {
       console.error(`Unable to parse data: ${error}`);
@@ -60,14 +56,12 @@ export const useHabit = () => {
     }
   };
 
-  const createHabit = async (data: HabitReq): Promise<void> => {
+  const handleDelete = async (id: number): Promise<void> => {
     try {
       setLoading(true);
-      await HabitController.create(data);
-      await loadHabits();
+      await HabitController.delete(id);
     } catch (error) {
       console.error(error);
-      Alert.alert('Error creating habit:', String(error));
     } finally {
       setLoading(false);
     }
@@ -76,9 +70,11 @@ export const useHabit = () => {
   return {
     loading,
     modalVisible,
+    habits,
+    navigation,
     setModalVisible,
     handleHabit,
     loadHabits,
-    createHabit,
+    handleDelete,
   };
 };
