@@ -38,7 +38,7 @@ export const ContainerStyles = StyleSheet.create({
   logOutContainer: {
     width: '100%',
     position: 'absolute',
-    top: 10,
+    top: 15,
     left: 10,
   },
 });

@@ -5,6 +5,6 @@ export default function parseTime(date: Date) {
   });
 }
 
-export function parseDate(date: Date) {
-  return date.toDateString();
+export function parseDate(date: any) {
+  return new Date(date).toLocaleDateString('hi-IN');
 }

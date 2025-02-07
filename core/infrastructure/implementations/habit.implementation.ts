@@ -59,7 +59,25 @@ export class HabitRepositoryImp implements HabitRepository {
   }
 
   async edit(data: HabitReq, id: number) {
-    console.log({ data, id });
+    return new Promise<void>((resolve, reject) => {
+      this.database.transaction((tx: Transaction) => {
+        tx.executeSql(
+          'UPDATE Habits SET name = ?, description = ?, frequency = ?, reminderTime = ? WHERE id = ?',
+          [data.name, data.description, data.frequency, data.reminderTime, id],
+          (_: Transaction, resultSet) => {
+            if (resultSet.rowsAffected > 0) {
+              resolve();
+            } else {
+              reject(new Error('No habit found with the given ID'));
+            }
+          },
+          (_: Transaction, error: SQLError) => {
+            reject(new Error(error.message));
+            return false;
+          },
+        );
+      });
+    });
   }
 
   async getAll() {

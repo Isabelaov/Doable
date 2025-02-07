@@ -4,19 +4,13 @@ import { AppDispatch, RootState } from '../redux/store/store';
 import { load } from '../redux/reducers/habits-slice';
 import { HabitController } from '../../core/infrastructure/controllers/habit.controller';
 import { HabitReq } from '../../core/domain/request/habit.request';
-import { Alert, ModalProps } from 'react-native';
 import { RootStack } from '../navigation/rootStack';
 import { useNavigation } from '@react-navigation/native';
-
-export type ItemModalProps = ModalProps & {
-  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  habitId: number | undefined | null;
-  setHabitId: React.Dispatch<React.SetStateAction<number | undefined>>;
-};
 
 export const useHabit = () => {
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const [habitId, setHabitId] = useState<number | undefined>();
   const dispatch = useDispatch<AppDispatch>();
   const habits = useSelector((state: RootState) => state.habits.habits);
   const navigation = useNavigation<RootStack>();
@@ -30,12 +24,13 @@ export const useHabit = () => {
       } else {
         await HabitController.createHabit(habit);
       }
-      Alert.alert('Habit created');
+
       await loadHabits();
     } catch (error) {
       console.error(error);
     } finally {
       setLoading(false);
+      setHabitId(undefined);
       setModalVisible(false);
     }
   };
@@ -75,6 +70,8 @@ export const useHabit = () => {
     modalVisible,
     habits,
     navigation,
+    habitId,
+    setHabitId,
     setModalVisible,
     handleHabit,
     loadHabits,
