@@ -58,10 +58,13 @@ export const useHabit = () => {
     try {
       setLoading(true);
       await HabitController.delete(id);
+      await loadHabits();
     } catch (error) {
       console.error(error);
     } finally {
+      setHabitId(undefined);
       setLoading(false);
+      setModalVisible(false);
     }
   };
 

@@ -15,7 +15,6 @@ type TimePickerFieldProps = {
 
 export function TimePicker({ field, form }: TimePickerFieldProps) {
   const [showPicker, setShowPicker] = useState(false);
-  console.log({ value: field.value });
 
   const handleTimeChange = (
     event: DateTimePickerEvent,

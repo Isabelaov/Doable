@@ -81,7 +81,7 @@ export class HabitRepositoryImp implements HabitRepository {
   }
 
   async getAll() {
-    return new Promise((resolve, reject) => {
+    return new Promise<Habit[]>((resolve, reject) => {
       this.database.transaction((tx: Transaction) => {
         tx.executeSql(
           'SELECT * FROM habits',
@@ -107,8 +107,24 @@ export class HabitRepositoryImp implements HabitRepository {
   }
 
   async delete(id: number) {
-    console.log({ id });
-
-    return 'yes';
+    return new Promise<string>((resolve, reject) => {
+      this.database.transaction((tx: Transaction) => {
+        tx.executeSql(
+          'DELETE FROM habits WHERE id = ?',
+          [id],
+          (_: Transaction, resultSet) => {
+            if (resultSet.rowsAffected > 0) {
+              resolve('Habit deleted');
+            } else {
+              reject(new Error('No habit found with the given ID'));
+            }
+          },
+          (_: Transaction, error: SQLError) => {
+            reject(new Error(error.message));
+            return false;
+          },
+        );
+      });
+    });
   }
 }
