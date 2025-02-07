@@ -13,21 +13,21 @@ import habitValidationSchema from '../utils/validation/habit.validation';
 import { Frequencies } from '../../core/enums/frequency.enum';
 import CancelButton from './CancelButton';
 import parseTime from '../utils/parsing/parseTime';
-import { Habit } from '../../core/domain/entities/habit.entity';
 
 export type HabitModalProps = ModalProps & {
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  id: number | undefined | null;
-  habit?: Habit;
+  id?: number | undefined;
+  setHabitId: React.Dispatch<React.SetStateAction<number | undefined>>;
 };
 
 export default function HabitModal({
   visible,
-  setVisible,
   id,
-  habit,
+  setVisible,
+  setHabitId,
 }: HabitModalProps): React.JSX.Element {
-  const { loading, handleDelete, handleHabit } = useHabit();
+  const { loading, handleDelete, handleHabit, habits } = useHabit();
+  const habit = habits.find(h => h.id === id);
 
   return (
     <Modal
@@ -36,6 +36,7 @@ export default function HabitModal({
       animationType="slide"
       onRequestClose={() => {
         setVisible(false);
+        setHabitId(undefined);
         return;
       }}>
       <View style={ModalStyles.modalContainer}>
@@ -48,6 +49,7 @@ export default function HabitModal({
                 style={ButtonStyles().cancelButton}
                 onPress={() => {
                   setVisible(false);
+                  setHabitId(undefined);
                   return;
                 }}
               />
@@ -60,6 +62,7 @@ export default function HabitModal({
                 validationSchema={habitValidationSchema}
                 onSubmit={values => {
                   handleHabit(values, id);
+                  setHabitId(undefined);
                   setVisible(false);
                 }}
                 initialValues={{
@@ -107,7 +110,7 @@ export default function HabitModal({
                       <Button
                         onPress={() => handleSubmit()}
                         text="Save"
-                        backgroundPrimary={false}
+                        backgroundPrimary
                         disabled={loading}
                       />
 

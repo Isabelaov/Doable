@@ -1,20 +1,63 @@
-import { View } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { LogoutButton } from '../components/LogOutButton';
-import { ButtonStyles, ContainerStyles, ModalStyles } from '../assets/styles';
+import {
+  ButtonStyles,
+  ContainerStyles,
+  ListStyles,
+  ModalStyles,
+  TextStyles,
+} from '../assets/styles';
 import { colors } from '../assets/colors';
-import { AddButton } from '../components';
+import { AddButton, ItemContent, Loading, renderItem } from '../components';
 import HabitModal from '../components/HabitModal';
 import { useHabit } from '../hooks/useHabit';
+import { FlatList, GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function HomeScreen() {
-  const { modalVisible, setModalVisible } = useHabit();
+  const {
+    habits,
+    loading,
+    modalVisible,
+    habitId,
+    setModalVisible,
+    setHabitId,
+  } = useHabit();
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
-    <View style={ModalStyles.containerWithModal}>
+    <GestureHandlerRootView style={ModalStyles.containerWithModal}>
       <View style={ContainerStyles.logOutContainer}>
         <LogoutButton />
       </View>
+
+      <Text style={TextStyles.title}>Your Habits</Text>
+
+      <HabitModal
+        visible={modalVisible}
+        setVisible={setModalVisible}
+        id={habitId}
+        setHabitId={setHabitId}
+      />
+
+      <FlatList
+        data={habits}
+        keyExtractor={item => item.id.toString()}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={ListStyles.item}
+            onPress={() => {
+              setModalVisible(true);
+              setHabitId(item.id);
+            }}>
+            <ItemContent item={item} />
+          </TouchableOpacity>
+        )}
+        style={{}}
+      />
 
       <AddButton
         color={colors.primary}
@@ -23,12 +66,6 @@ export default function HomeScreen() {
           setModalVisible(true);
         }}
       />
-
-      <HabitModal
-        id={undefined}
-        visible={modalVisible}
-        setVisible={setModalVisible}
-      />
-    </View>
+    </GestureHandlerRootView>
   );
 }

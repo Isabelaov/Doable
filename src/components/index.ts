@@ -7,3 +7,4 @@ export * from './FrequencyPicker';
 export * from './Anchor';
 export * from './TimePicker';
 export * from './CancelButton';
+export * from './RenderItem';

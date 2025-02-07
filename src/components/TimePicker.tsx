@@ -15,6 +15,7 @@ type TimePickerFieldProps = {
 
 export function TimePicker({ field, form }: TimePickerFieldProps) {
   const [showPicker, setShowPicker] = useState(false);
+
   const handleTimeChange = (
     event: DateTimePickerEvent,
     selectedTime = new Date(),
@@ -33,7 +34,9 @@ export function TimePicker({ field, form }: TimePickerFieldProps) {
         onPress={() => setShowPicker(true)}
         style={ContainerStyles.next}>
         <CustomIcon name="clock" family="Feather" />
-        <Text style={TextStyles.time}>{parseTime(new Date())}</Text>
+        <Text style={TextStyles.time}>
+          {field.value || parseTime(new Date())}
+        </Text>
       </TouchableOpacity>
 
       {showPicker && (

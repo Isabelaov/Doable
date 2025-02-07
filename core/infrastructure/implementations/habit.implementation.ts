@@ -8,16 +8,23 @@ import { Habit } from '../../domain/entities/habit.entity';
 import { HabitReq } from '../../domain/request/habit.request';
 
 export class HabitRepositoryImp implements HabitRepository {
-  private database!: SQLiteDatabase;
-  init = this.initDb();
+  private database: SQLiteDatabase = SQLite.openDatabase(
+    {
+      name: 'habits_db',
+      location: 'default',
+    },
+    () =>
+      console.log('db opened', (err: any) =>
+        console.error('error opening db', err),
+      ),
+  );
+
+  constructor() {
+    this.initDb();
+  }
 
   private async initDb() {
     try {
-      this.database = await SQLite.openDatabase({
-        name: 'habits_db',
-        location: 'default',
-      });
-
       this.database.transaction((tx: Transaction) => {
         tx.executeSql(`CREATE TABLE IF NOT EXISTS habits (
           id INTEGER PRIMARY KEY,
@@ -52,11 +59,29 @@ export class HabitRepositoryImp implements HabitRepository {
   }
 
   async edit(data: HabitReq, id: number) {
-    console.log({ data, id });
+    return new Promise<void>((resolve, reject) => {
+      this.database.transaction((tx: Transaction) => {
+        tx.executeSql(
+          'UPDATE Habits SET name = ?, description = ?, frequency = ?, reminderTime = ? WHERE id = ?',
+          [data.name, data.description, data.frequency, data.reminderTime, id],
+          (_: Transaction, resultSet) => {
+            if (resultSet.rowsAffected > 0) {
+              resolve();
+            } else {
+              reject(new Error('No habit found with the given ID'));
+            }
+          },
+          (_: Transaction, error: SQLError) => {
+            reject(new Error(error.message));
+            return false;
+          },
+        );
+      });
+    });
   }
 
   async getAll() {
-    return new Promise((resolve, reject) => {
+    return new Promise<Habit[]>((resolve, reject) => {
       this.database.transaction((tx: Transaction) => {
         tx.executeSql(
           'SELECT * FROM habits',
@@ -82,8 +107,24 @@ export class HabitRepositoryImp implements HabitRepository {
   }
 
   async delete(id: number) {
-    console.log({ id });
-
-    return 'yes';
+    return new Promise<string>((resolve, reject) => {
+      this.database.transaction((tx: Transaction) => {
+        tx.executeSql(
+          'DELETE FROM habits WHERE id = ?',
+          [id],
+          (_: Transaction, resultSet) => {
+            if (resultSet.rowsAffected > 0) {
+              resolve('Habit deleted');
+            } else {
+              reject(new Error('No habit found with the given ID'));
+            }
+          },
+          (_: Transaction, error: SQLError) => {
+            reject(new Error(error.message));
+            return false;
+          },
+        );
+      });
+    });
   }
 }
