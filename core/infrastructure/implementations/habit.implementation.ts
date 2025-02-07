@@ -8,16 +8,23 @@ import { Habit } from '../../domain/entities/habit.entity';
 import { HabitReq } from '../../domain/request/habit.request';
 
 export class HabitRepositoryImp implements HabitRepository {
-  private database!: SQLiteDatabase;
-  init = this.initDb();
+  private database: SQLiteDatabase = SQLite.openDatabase(
+    {
+      name: 'habits_db',
+      location: 'default',
+    },
+    () =>
+      console.log('db opened', (err: any) =>
+        console.error('error opening db', err),
+      ),
+  );
+
+  constructor() {
+    this.initDb();
+  }
 
   private async initDb() {
     try {
-      this.database = await SQLite.openDatabase({
-        name: 'habits_db',
-        location: 'default',
-      });
-
       this.database.transaction((tx: Transaction) => {
         tx.executeSql(`CREATE TABLE IF NOT EXISTS habits (
           id INTEGER PRIMARY KEY,

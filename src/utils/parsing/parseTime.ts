@@ -4,3 +4,7 @@ export default function parseTime(date: Date) {
     minute: '2-digit',
   });
 }
+
+export function parseDate(date: Date) {
+  return date.toDateString();
+}

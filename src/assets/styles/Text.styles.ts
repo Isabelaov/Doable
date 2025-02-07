@@ -40,6 +40,9 @@ export const TextStyles = StyleSheet.create({
     fontSize: 17,
     marginLeft: 5,
   },
+  inline: {
+    fontSize: 18,
+  },
   graph: {
     color: colors.secondary,
     fontSize: 20,

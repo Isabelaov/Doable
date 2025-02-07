@@ -4,8 +4,6 @@ import { colors } from '../colors';
 export const ModalStyles = StyleSheet.create({
   containerWithModal: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   modalContainer: {
     flex: 1,

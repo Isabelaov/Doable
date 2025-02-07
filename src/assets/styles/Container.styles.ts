@@ -29,6 +29,7 @@ export const ContainerStyles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+
   buttonEnd: {
     position: 'absolute',
     right: 5,
