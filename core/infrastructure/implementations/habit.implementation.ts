@@ -1,4 +1,4 @@
-import SQLite, {
+import {
   SQLError,
   SQLiteDatabase,
   Transaction,
@@ -6,24 +6,16 @@ import SQLite, {
 import { HabitRepository } from '../../domain/repositories/habit.repository';
 import { Habit } from '../../domain/entities/habit.entity';
 import { HabitReq } from '../../domain/request/habit.request';
+import { db } from '../../config/db.config';
 
 export class HabitRepositoryImp implements HabitRepository {
-  private database: SQLiteDatabase = SQLite.openDatabase(
-    {
-      name: 'habits_db',
-      location: 'default',
-    },
-    () =>
-      console.log('db opened', (err: any) =>
-        console.error('error opening db', err),
-      ),
-  );
+  private readonly database: SQLiteDatabase = db;
 
   constructor() {
-    this.initDb();
+    this.initTable();
   }
 
-  private async initDb() {
+  private async initTable() {
     try {
       this.database.transaction((tx: Transaction) => {
         tx.executeSql(`CREATE TABLE IF NOT EXISTS habits (
