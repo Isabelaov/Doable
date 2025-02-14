@@ -30,7 +30,7 @@ export class ProgressController {
   static async getProgressFromHabit(habitId: number) {
     try {
       return await getProgressFromHabit(this.repository, habitId);
-    } catch (error) {
+    } catch (error: any) {
       console.error({ ...error });
       Alert.alert(String(error));
     }

@@ -11,25 +11,6 @@ import { Progress } from '../../domain/entities/progress.entity';
 export class ProgressRepositoryImp implements ProgressRepository {
   private readonly database: SQLiteDatabase = db;
 
-  constructor() {
-    this.initTable();
-  }
-
-  private async initTable() {
-    try {
-      this.database.transaction((tx: Transaction) => {
-        tx.executeSql(`CREATE TABLE IF NOT EXISTS progress (
-          id INTEGER PRIMARY KEY,
-          habit_id INTEGER NOT NULL,
-          FOREIGN KEY (habit_id) REFERENCES habits(id) ON DELETE CASCADE,
-          date DATETIME DEFAULT CURRENT_TIMESTAMP
-          )`);
-      });
-    } catch (error: any) {
-      console.error({ ...error });
-    }
-  }
-
   async create(data: ProgressReq): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       this.database.transaction((tx: Transaction) => {

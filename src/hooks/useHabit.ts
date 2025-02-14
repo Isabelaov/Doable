@@ -39,6 +39,7 @@ export const useHabit = () => {
     try {
       setLoading(true);
       const res = await HabitController.getAll();
+      console.log(res);
 
       if (res) {
         dispatch(load(res));

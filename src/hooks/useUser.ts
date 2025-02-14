@@ -7,6 +7,7 @@ import { NavigationProps } from '../navigation/rootStack';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../redux/store/store';
 import { login, logout } from '../redux/reducers/auth-slice';
+import { HabitController } from '../../core/infrastructure/controllers/habit.controller';
 
 export const useUser = () => {
   const [submitting, setSubmitting] = useState(false);
@@ -45,6 +46,7 @@ export const useUser = () => {
   const logoutUser = async () => {
     setSubmitting(true);
     await AsyncStorage.removeItem('token');
+    HabitController.deleteDB();
     dispatch(logout());
     navigation.navigate('Login');
     setSubmitting(false);

@@ -1,6 +1,7 @@
 import { Alert } from 'react-native';
 import {
   createHabit,
+  deleteDB,
   deleteHabit,
   editHabit,
   getHabits,
@@ -45,5 +46,9 @@ export class HabitController {
       console.log(error);
       Alert.alert(String(error));
     }
+  }
+
+  static deleteDB() {
+    return deleteDB(this.habitRepository);
   }
 }

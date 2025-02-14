@@ -24,10 +24,6 @@ export default function HomeScreen() {
     setHabitId,
   } = useHabit();
 
-  if (loading) {
-    return <Loading />;
-  }
-
   return (
     <GestureHandlerRootView style={ModalStyles.containerWithModal}>
       <View style={ContainerStyles.logOutContainer}>
@@ -36,35 +32,41 @@ export default function HomeScreen() {
 
       <Text style={TextStyles.title}>Your Habits</Text>
 
+      {loading ? (
+        <Loading />
+      ) : (
+        <>
+          <FlatList
+            data={habits}
+            keyExtractor={item => item.id.toString()}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                style={ListStyles.item}
+                onPress={() => {
+                  setModalVisible(true);
+                  setHabitId(item.id);
+                }}>
+                <ItemContent item={item} />
+              </TouchableOpacity>
+            )}
+            style={{}}
+          />
+
+          <AddButton
+            color={colors.primary}
+            style={ButtonStyles('rgba(0,0,0,0.1)').addButton}
+            onPress={() => {
+              setModalVisible(true);
+            }}
+          />
+        </>
+      )}
+
       <HabitModal
         visible={modalVisible}
         setVisible={setModalVisible}
         id={habitId}
         setHabitId={setHabitId}
-      />
-
-      <FlatList
-        data={habits}
-        keyExtractor={item => item.id.toString()}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={ListStyles.item}
-            onPress={() => {
-              setModalVisible(true);
-              setHabitId(item.id);
-            }}>
-            <ItemContent item={item} />
-          </TouchableOpacity>
-        )}
-        style={{}}
-      />
-
-      <AddButton
-        color={colors.primary}
-        style={ButtonStyles('rgba(0,0,0,0.1)').addButton}
-        onPress={() => {
-          setModalVisible(true);
-        }}
       />
     </GestureHandlerRootView>
   );

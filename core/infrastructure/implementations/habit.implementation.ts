@@ -7,6 +7,7 @@ import { HabitRepository } from '../../domain/repositories/habit.repository';
 import { Habit } from '../../domain/entities/habit.entity';
 import { HabitReq } from '../../domain/request/habit.request';
 import { db } from '../../config/db.config';
+import SQLite from 'react-native-sqlite-storage';
 
 export class HabitRepositoryImp implements HabitRepository {
   private readonly database: SQLiteDatabase = db;
@@ -18,14 +19,37 @@ export class HabitRepositoryImp implements HabitRepository {
   private async initTable() {
     try {
       this.database.transaction((tx: Transaction) => {
-        tx.executeSql(`CREATE TABLE IF NOT EXISTS habits (
+        tx.executeSql(
+          `CREATE TABLE IF NOT EXISTS habits (
           id INTEGER PRIMARY KEY,
           name TEXT NOT NULL,
           description TEXT,
           frequency TEXT NOT NULL,
           reminderTime TEXT NOT NULL,
           createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
-          )`);
+          )`,
+          [],
+          () => console.log('Habits table created'),
+          (_, error) => {
+            console.error('Error creating habits table', error.message);
+            return false;
+          },
+        );
+
+        tx.executeSql(
+          `CREATE TABLE IF NOT EXISTS progress (
+            id INTEGER PRIMARY KEY,
+            habit_id INTEGER NOT NULL,
+            date DATETIME DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (habit_id) REFERENCES habits(id) ON DELETE CASCADE
+            )`,
+          [],
+          () => console.log('Progress table created'),
+          (_, error) => {
+            console.error('Error creating progress table', error.message);
+            return false;
+          },
+        );
       });
     } catch (error: any) {
       console.error({ ...error });
@@ -74,15 +98,25 @@ export class HabitRepositoryImp implements HabitRepository {
 
   async getAll() {
     return new Promise<Habit[]>((resolve, reject) => {
+      console.log('before transaction');
+
       this.database.transaction((tx: Transaction) => {
         tx.executeSql(
-          'SELECT * FROM habits',
+          `
+           SELECT habits.*, progress.*
+            FROM habits LEFT JOIN progress ON habits.id = progress.habit_id;
+          `,
           [],
           (_: Transaction, { rows }: any) => {
+            console.log({ rows });
+
             const habits: Habit[] = [];
             for (let i = 0; i < rows.length; i++) {
               habits.push(rows.item(i));
             }
+
+            console.log({ habits });
+
             resolve(habits as []);
           },
           (_: Transaction, error: SQLError) => {
@@ -118,5 +152,13 @@ export class HabitRepositoryImp implements HabitRepository {
         );
       });
     });
+  }
+
+  deleteDB() {
+    SQLite.deleteDatabase(
+      { name: 'doable_db', location: 'default' },
+      () => console.log('Database deleted successfully'),
+      err => console.error('Error while deleting database', err),
+    );
   }
 }

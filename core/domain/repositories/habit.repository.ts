@@ -6,5 +6,6 @@ export interface HabitRepository {
   edit(data: HabitReq, id: number): Promise<any>;
   getAll(): Promise<Habit[] | any>;
   delete(id: number): Promise<string>;
+  deleteDB(): void;
   // getOne(id: number): Promise<Habit>;
 }

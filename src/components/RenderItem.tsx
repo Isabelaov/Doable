@@ -2,7 +2,7 @@ import { Text, View } from 'react-native';
 import React from 'react';
 import { Habit } from '../../core/domain/entities/habit.entity';
 import { ListStyles, TextStyles } from '../assets/styles';
-import { parseDate } from '../utils/parsing/parseTime';
+import { CustomIcon } from './Icon';
 
 export const ItemContent = ({ item }: { item: Habit }) => (
   <>
@@ -14,8 +14,23 @@ export const ItemContent = ({ item }: { item: Habit }) => (
     </View>
 
     <View style={ListStyles.right}>
-      <Text style={TextStyles.inline}>{parseDate(item.createdAt)}</Text>
-      <Text style={TextStyles.inline}>{item.reminderTime}</Text>
+      <View>
+        <Text style={TextStyles.inline}>{item.reminderTime}</Text>
+        <Text style={ListStyles.description}>{item.frequency}</Text>
+      </View>
+
+      <View style={ListStyles.icon}>
+        {completed ? (
+          <CustomIcon size={35} family="Ionicons" name="checkmark-circle" />
+        ) : (
+          <CustomIcon
+            size={35}
+            family="Entypo"
+            name="circle-with-cross"
+            color={'red'}
+          />
+        )}
+      </View>
     </View>
   </>
 );

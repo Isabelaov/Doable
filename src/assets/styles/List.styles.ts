@@ -18,11 +18,11 @@ export const ListStyles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
   },
   left: {
     flex: 1,
-    justifyContent: 'space-between',
+    justifyContent: 'space-evenly',
   },
   title: {
     fontSize: 19,
@@ -30,5 +30,8 @@ export const ListStyles = StyleSheet.create({
   description: {
     fontSize: 15,
     fontStyle: 'italic',
+  },
+  icon: {
+    marginLeft: 15,
   },
 });
