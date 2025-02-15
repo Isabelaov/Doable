@@ -63,7 +63,8 @@ export class HabitRepositoryImp implements HabitRepository {
           `
            SELECT 
               habits.*,
-              progress.date
+              progress.date,
+              progress.id AS progress_id
             FROM 
               habits 
             LEFT JOIN 
@@ -117,6 +118,22 @@ export class HabitRepositoryImp implements HabitRepository {
     return new Promise<string>((resolve, reject) => {
       this.database?.transaction((tx: Transaction) => {
         tx.executeSql(
+          'DELETE FROM progress WHERE progress.habit_id = ?',
+          [id],
+          (_: Transaction, resultSet) => {
+            if (resultSet.rowsAffected) {
+              console.log('Progress deleted');
+            } else {
+              console.log('No progress found with habit id', id);
+            }
+          },
+          (_: Transaction, error: SQLError) => {
+            reject(new Error(error.message));
+            return false;
+          },
+        );
+
+        tx.executeSql(
           'DELETE FROM habits WHERE id = ?',
           [id],
           (_: Transaction, resultSet) => {
@@ -136,7 +153,7 @@ export class HabitRepositoryImp implements HabitRepository {
   }
 
   async deleteDB() {
-    await this.database!.close();
+    await this.database?.close();
 
     await new Promise<void>((res, rej) => {
       SQLite.deleteDatabase(

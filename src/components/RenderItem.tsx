@@ -3,11 +3,10 @@ import React from 'react';
 import { Habit } from '../../core/domain/entities/habit.entity';
 import { ListStyles, TextStyles } from '../assets/styles';
 import { CustomIcon } from './Icon';
+import { isCompleted } from '../utils/calcs/isCompleted';
 
 export const ItemContent = ({ item }: { item: Habit }) => {
-  const completed = item.progress.length > 0;
-
-  console.log({ item });
+  console.log('item:', { ...item });
 
   return (
     <>
@@ -25,7 +24,7 @@ export const ItemContent = ({ item }: { item: Habit }) => {
         </View>
 
         <View style={ListStyles.icon}>
-          {completed ? (
+          {isCompleted(item) ? (
             <CustomIcon size={35} family="Ionicons" name="checkmark-circle" />
           ) : (
             <CustomIcon

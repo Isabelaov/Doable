@@ -9,10 +9,11 @@ import {
   TextStyles,
 } from '../assets/styles';
 import { colors } from '../assets/colors';
-import { AddButton, ItemContent, Loading, renderItem } from '../components';
+import { AddButton, ItemContent, Loading } from '../components';
 import HabitModal from '../components/HabitModal';
 import { useHabit } from '../hooks/useHabit';
 import { FlatList, GestureHandlerRootView } from 'react-native-gesture-handler';
+import { useProgress } from '../hooks';
 
 export default function HomeScreen() {
   const {
@@ -22,7 +23,10 @@ export default function HomeScreen() {
     habitId,
     setModalVisible,
     setHabitId,
+    loadHabits,
   } = useHabit();
+
+  const { addProgress } = useProgress();
 
   return (
     <GestureHandlerRootView style={ModalStyles.containerWithModal}>
@@ -42,6 +46,10 @@ export default function HomeScreen() {
             renderItem={({ item }) => (
               <TouchableOpacity
                 style={ListStyles.item}
+                onLongPress={() => {
+                  addProgress(item.id);
+                  loadHabits();
+                }}
                 onPress={() => {
                   setModalVisible(true);
                   setHabitId(item.id);
@@ -49,7 +57,6 @@ export default function HomeScreen() {
                 <ItemContent item={item} />
               </TouchableOpacity>
             )}
-            style={{}}
           />
 
           <AddButton

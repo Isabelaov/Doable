@@ -8,16 +8,16 @@ export function initDB() {
         location: 'default',
       },
       () => {
-        db.transaction((tx: Transaction) => {
-          tx.executeSql(
-            'PRAGMA foreign_keys = ON;',
-            [],
-            () => console.log('Foreign keys enabled'),
-            (_, error) => {
-              console.error(error);
-            },
-          );
+        db.executeSql(
+          'PRAGMA foreign_keys = ON;',
+          [],
+          () => console.log('Foreign keys enabled'),
+          (_, error) => {
+            console.error(error);
+          },
+        );
 
+        db.transaction((tx: Transaction) => {
           tx.executeSql(
             `CREATE TABLE IF NOT EXISTS habits (
                   id INTEGER PRIMARY KEY,
@@ -37,11 +37,11 @@ export function initDB() {
 
           tx.executeSql(
             `CREATE TABLE IF NOT EXISTS progress (
-                    id INTEGER PRIMARY KEY,
-                    habit_id INTEGER NOT NULL,
-                    date DATETIME DEFAULT CURRENT_TIMESTAMP,
-                    FOREIGN KEY (habit_id) REFERENCES habits(id) ON DELETE CASCADE
-                    )`,
+              id INTEGER PRIMARY KEY,
+              habit_id INTEGER NOT NULL,
+              date DATETIME DEFAULT CURRENT_TIMESTAMP,
+              FOREIGN KEY (habit_id) REFERENCES habits(id) ON DELETE CASCADE
+            )`,
             [],
             () => {
               console.log('Progress table created');
