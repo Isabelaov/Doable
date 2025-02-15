@@ -52,5 +52,5 @@ export const useUser = () => {
     setSubmitting(false);
   };
 
-  return { register, loginUser, submitting, logoutUser };
+  return { submitting, register, loginUser, logoutUser };
 };

@@ -18,7 +18,7 @@ export class UserRepositoryImp implements UserRepository {
     this.instance.interceptors.response.use(
       response => response,
       error => {
-        console.log({ ...error });
+        console.error({ ...error });
 
         if (error.response) {
           console.error(
