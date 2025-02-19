@@ -1,4 +1,4 @@
-import SQLite, {
+import {
   SQLError,
   SQLiteDatabase,
   Transaction,
@@ -6,46 +6,24 @@ import SQLite, {
 import { HabitRepository } from '../../domain/repositories/habit.repository';
 import { Habit } from '../../domain/entities/habit.entity';
 import { HabitReq } from '../../domain/request/habit.request';
+import SQLite from 'react-native-sqlite-storage';
+import { initDB } from '../../config/db.config';
 
 export class HabitRepositoryImp implements HabitRepository {
-  private database: SQLiteDatabase = SQLite.openDatabase(
-    {
-      name: 'habits_db',
-      location: 'default',
-    },
-    () =>
-      console.log('db opened', (err: any) =>
-        console.error('error opening db', err),
-      ),
-  );
-
-  constructor() {
-    this.initDb();
-  }
-
-  private async initDb() {
-    try {
-      this.database.transaction((tx: Transaction) => {
-        tx.executeSql(`CREATE TABLE IF NOT EXISTS habits (
-          id INTEGER PRIMARY KEY,
-          name TEXT NOT NULL,
-          description TEXT,
-          frequency TEXT NOT NULL,
-          reminderTime TEXT NOT NULL,
-          createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
-          )`);
-      });
-    } catch (error: any) {
-      console.error({ ...error });
-    }
-  }
+  private database: SQLiteDatabase | undefined;
 
   async create(data: HabitReq) {
     return new Promise<void>((resolve, reject) => {
-      this.database.transaction((tx: Transaction) => {
+      this.database!.transaction((tx: Transaction) => {
         tx.executeSql(
-          'INSERT INTO Habits (name, description, frequency, reminderTime) VALUES ( ?, ?, ?, ?)',
-          [data.name, data.description, data.frequency, data.reminderTime],
+          'INSERT INTO habits (name, description, frequency, reminder_time, created_at) VALUES ( ?, ?, ?, ?, ?)',
+          [
+            data.name,
+            data.description,
+            data.frequency,
+            data.reminderTime,
+            String(new Date()),
+          ],
           (_: Transaction) => {
             resolve();
           },
@@ -60,9 +38,9 @@ export class HabitRepositoryImp implements HabitRepository {
 
   async edit(data: HabitReq, id: number) {
     return new Promise<void>((resolve, reject) => {
-      this.database.transaction((tx: Transaction) => {
+      this.database!.transaction((tx: Transaction) => {
         tx.executeSql(
-          'UPDATE Habits SET name = ?, description = ?, frequency = ?, reminderTime = ? WHERE id = ?',
+          'UPDATE habits SET name = ?, description = ?, frequency = ?, reminder_time = ? WHERE id = ?;',
           [data.name, data.description, data.frequency, data.reminderTime, id],
           (_: Transaction, resultSet) => {
             if (resultSet.rowsAffected > 0) {
@@ -81,16 +59,52 @@ export class HabitRepositoryImp implements HabitRepository {
   }
 
   async getAll() {
+    if (!this.database) {
+      this.database = await initDB();
+    }
+
     return new Promise<Habit[]>((resolve, reject) => {
-      this.database.transaction((tx: Transaction) => {
+      this.database!.transaction((tx: Transaction) => {
         tx.executeSql(
-          'SELECT * FROM habits',
+          `
+           SELECT 
+              habits.*,
+              progress.date,
+              progress.id AS progress_id
+            FROM 
+              habits 
+            LEFT JOIN 
+              progress 
+            ON 
+            habits.id = progress.habit_id;
+          `,
           [],
           (_: Transaction, { rows }: any) => {
-            const habits: Habit[] = [];
+            const habitsMap: Record<number, any> = {};
             for (let i = 0; i < rows.length; i++) {
-              habits.push(rows.item(i));
+              const row = rows.item(i);
+
+              if (!habitsMap[row.id]) {
+                habitsMap[row.id] = {
+                  id: row.id,
+                  name: row.name,
+                  description: row.description,
+                  frequency: row.frequency,
+                  reminderTime: row.reminder_time,
+                  progress: [],
+                };
+              }
+
+              if (row.progress_id) {
+                habitsMap[row.id].progress.push({
+                  id: row.progress_id,
+                  date: row.date,
+                });
+              }
             }
+
+            const habits = Object.values(habitsMap);
+
             resolve(habits as []);
           },
           (_: Transaction, error: SQLError) => {
@@ -108,7 +122,23 @@ export class HabitRepositoryImp implements HabitRepository {
 
   async delete(id: number) {
     return new Promise<string>((resolve, reject) => {
-      this.database.transaction((tx: Transaction) => {
+      this.database?.transaction((tx: Transaction) => {
+        tx.executeSql(
+          'DELETE FROM progress WHERE progress.habit_id = ?',
+          [id],
+          (_: Transaction, resultSet) => {
+            if (resultSet.rowsAffected) {
+              console.log('Progress deleted');
+            } else {
+              console.log('No progress found with habit id', id);
+            }
+          },
+          (_: Transaction, error: SQLError) => {
+            reject(new Error(error.message));
+            return false;
+          },
+        );
+
         tx.executeSql(
           'DELETE FROM habits WHERE id = ?',
           [id],
@@ -125,6 +155,25 @@ export class HabitRepositoryImp implements HabitRepository {
           },
         );
       });
+    });
+  }
+
+  async deleteDB() {
+    await this.database?.close();
+
+    await new Promise<void>((res, rej) => {
+      SQLite.deleteDatabase(
+        { name: 'doable_db', location: 'default' },
+        () => {
+          this.database = undefined;
+          console.log('Database deleted successfully');
+          res();
+        },
+        err => {
+          console.error('Error while deleting database', err);
+          rej(err);
+        },
+      );
     });
   }
 }

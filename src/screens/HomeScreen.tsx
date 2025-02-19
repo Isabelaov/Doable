@@ -1,32 +1,26 @@
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text } from 'react-native';
 import React from 'react';
 import { LogoutButton } from '../components/LogOutButton';
 import {
   ButtonStyles,
   ContainerStyles,
-  ListStyles,
   ModalStyles,
   TextStyles,
 } from '../assets/styles';
 import { colors } from '../assets/colors';
-import { AddButton, ItemContent, Loading, renderItem } from '../components';
+import { AddButton, Loading, RenderItem } from '../components';
 import HabitModal from '../components/HabitModal';
 import { useHabit } from '../hooks/useHabit';
 import { FlatList, GestureHandlerRootView } from 'react-native-gesture-handler';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../redux/store/store';
+import { open } from '../redux/reducers/visibility-slice';
 
 export default function HomeScreen() {
-  const {
-    habits,
-    loading,
-    modalVisible,
-    habitId,
-    setModalVisible,
-    setHabitId,
-  } = useHabit();
-
-  if (loading) {
-    return <Loading />;
-  }
+  const { habits, loading } = useHabit();
+  const visible = useSelector((state: RootState) => state.visibility.visible);
+  const habitId = useSelector((state: RootState) => state.visibility.habitId);
+  const dispatch = useDispatch<AppDispatch>();
 
   return (
     <GestureHandlerRootView style={ModalStyles.containerWithModal}>
@@ -36,36 +30,28 @@ export default function HomeScreen() {
 
       <Text style={TextStyles.title}>Your Habits</Text>
 
-      <HabitModal
-        visible={modalVisible}
-        setVisible={setModalVisible}
-        id={habitId}
-        setHabitId={setHabitId}
-      />
+      {loading ? (
+        <Loading />
+      ) : (
+        <>
+          <FlatList
+            data={habits}
+            extraData={habits}
+            keyExtractor={item => item.id.toString()}
+            renderItem={({ item }) => <RenderItem item={item} />}
+          />
 
-      <FlatList
-        data={habits}
-        keyExtractor={item => item.id.toString()}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            style={ListStyles.item}
+          <AddButton
+            color={colors.primary}
+            style={ButtonStyles('rgba(0,0,0,0.1)').addButton}
             onPress={() => {
-              setModalVisible(true);
-              setHabitId(item.id);
-            }}>
-            <ItemContent item={item} />
-          </TouchableOpacity>
-        )}
-        style={{}}
-      />
+              dispatch(open());
+            }}
+          />
+        </>
+      )}
 
-      <AddButton
-        color={colors.primary}
-        style={ButtonStyles('rgba(0,0,0,0.1)').addButton}
-        onPress={() => {
-          setModalVisible(true);
-        }}
-      />
+      <HabitModal visible={visible} id={habitId} />
     </GestureHandlerRootView>
   );
 }

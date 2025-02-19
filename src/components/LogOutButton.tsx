@@ -4,17 +4,11 @@ import { Loading } from './Loading';
 import { useUser } from '../hooks/useUser';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-export const LogoutButton: React.FC<TouchableOpacityProps> = ({
-  disabled = false,
-  ...rest
-}) => {
+export const LogoutButton: React.FC<TouchableOpacityProps> = ({ ...rest }) => {
   const { logoutUser, submitting } = useUser();
 
   return (
-    <TouchableOpacity
-      disabled={disabled || submitting}
-      onPress={logoutUser}
-      {...rest}>
+    <TouchableOpacity disabled={submitting} onPress={logoutUser} {...rest}>
       {submitting ? <Loading /> : <Icon name="logout" size={30} />}
     </TouchableOpacity>
   );

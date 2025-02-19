@@ -6,13 +6,13 @@ import { HabitController } from '../../core/infrastructure/controllers/habit.con
 import { HabitReq } from '../../core/domain/request/habit.request';
 import { RootStack } from '../navigation/rootStack';
 import { useNavigation } from '@react-navigation/native';
+import { close } from '../redux/reducers/visibility-slice';
 
 export const useHabit = () => {
   const [loading, setLoading] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [habitId, setHabitId] = useState<number | undefined>();
-  const dispatch = useDispatch<AppDispatch>();
+
   const habits = useSelector((state: RootState) => state.habits.habits);
+  const dispatch = useDispatch<AppDispatch>();
   const navigation = useNavigation<RootStack>();
 
   const handleHabit = async (habit: HabitReq, id?: number) => {
@@ -29,9 +29,23 @@ export const useHabit = () => {
     } catch (error) {
       console.error(error);
     } finally {
+      dispatch(close());
       setLoading(false);
-      setHabitId(undefined);
-      setModalVisible(false);
+    }
+  };
+
+  const handleDelete = async (id: number): Promise<void> => {
+    try {
+      setLoading(true);
+
+      await HabitController.delete(id);
+
+      await loadHabits();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      dispatch(close());
+      setLoading(false);
     }
   };
 
@@ -54,28 +68,10 @@ export const useHabit = () => {
     loadHabits();
   }, [loadHabits]);
 
-  const handleDelete = async (id: number): Promise<void> => {
-    try {
-      setLoading(true);
-      await HabitController.delete(id);
-      await loadHabits();
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setHabitId(undefined);
-      setLoading(false);
-      setModalVisible(false);
-    }
-  };
-
   return {
     loading,
-    modalVisible,
     habits,
     navigation,
-    habitId,
-    setHabitId,
-    setModalVisible,
     handleHabit,
     loadHabits,
     handleDelete,

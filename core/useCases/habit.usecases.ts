@@ -20,3 +20,7 @@ export const getHabits = (repository: HabitRepository) => {
 export const deleteHabit = (repository: HabitRepository, id: number) => {
   return repository.delete(id);
 };
+
+export const deleteDB = (repository: HabitRepository) => {
+  return repository.deleteDB();
+};

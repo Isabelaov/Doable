@@ -1,6 +1,7 @@
 import { Alert } from 'react-native';
 import {
   createHabit,
+  deleteDB,
   deleteHabit,
   editHabit,
   getHabits,
@@ -15,7 +16,7 @@ export class HabitController {
     try {
       return await createHabit(this.habitRepository, data);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       Alert.alert(String(error));
     }
   }
@@ -24,7 +25,7 @@ export class HabitController {
     try {
       return await editHabit(this.habitRepository, data, id);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       Alert.alert(String(error));
     }
   }
@@ -33,7 +34,7 @@ export class HabitController {
     try {
       return await getHabits(this.habitRepository);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       Alert.alert(String(error));
     }
   }
@@ -42,8 +43,16 @@ export class HabitController {
     try {
       return await deleteHabit(this.habitRepository, id);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       Alert.alert(String(error));
+    }
+  }
+
+  static async deleteDB() {
+    try {
+      return await deleteDB(this.habitRepository);
+    } catch (error: any) {
+      console.error('Error deleting DB', error.message);
     }
   }
 }
