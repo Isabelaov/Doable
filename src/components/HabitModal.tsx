@@ -13,20 +13,20 @@ import habitValidationSchema from '../utils/validation/habit.validation';
 import { Frequencies } from '../../core/enums/frequency.enum';
 import CancelButton from './CancelButton';
 import parseTime from '../utils/parsing/parseTime';
+import { AppDispatch } from '../redux/store/store';
+import { useDispatch } from 'react-redux';
+import { close } from '../redux/reducers/visibility-slice';
 
 export type HabitModalProps = ModalProps & {
-  setVisible: React.Dispatch<React.SetStateAction<boolean>>;
   id?: number;
-  setHabitId: React.Dispatch<React.SetStateAction<number | undefined>>;
 };
 
 export default function HabitModal({
   visible,
   id,
-  setVisible,
-  setHabitId,
 }: HabitModalProps): React.JSX.Element {
   const { loading, handleDelete, handleHabit, habits } = useHabit();
+  const dispatch = useDispatch<AppDispatch>();
   const habit = habits.find(h => h.id === id);
 
   return (
@@ -39,11 +39,7 @@ export default function HabitModal({
             <>
               <CancelButton
                 style={ButtonStyles().cancelButton}
-                onPress={() => {
-                  setVisible(false);
-                  setHabitId(undefined);
-                  return;
-                }}
+                onPress={() => dispatch(close())}
               />
 
               <Text style={TextStyles.title}>
@@ -54,9 +50,7 @@ export default function HabitModal({
                 validationSchema={habitValidationSchema}
                 onSubmit={values => {
                   handleHabit(values, id);
-                  setHabitId(undefined);
-                  setVisible(false);
-                  return;
+                  dispatch(close());
                 }}
                 initialValues={{
                   name: habit?.name || '',
@@ -111,9 +105,7 @@ export default function HabitModal({
                         <Button
                           onPress={() => {
                             handleDelete(id);
-                            setHabitId(undefined);
-                            setVisible(false);
-                            return;
+                            dispatch(close());
                           }}
                           backgroundPrimary={false}
                           text="Delete"

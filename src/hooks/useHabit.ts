@@ -6,13 +6,13 @@ import { HabitController } from '../../core/infrastructure/controllers/habit.con
 import { HabitReq } from '../../core/domain/request/habit.request';
 import { RootStack } from '../navigation/rootStack';
 import { useNavigation } from '@react-navigation/native';
+import { close } from '../redux/reducers/visibility-slice';
 
 export const useHabit = () => {
   const [loading, setLoading] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [habitId, setHabitId] = useState<number | undefined>();
-  const dispatch = useDispatch<AppDispatch>();
+
   const habits = useSelector((state: RootState) => state.habits.habits);
+  const dispatch = useDispatch<AppDispatch>();
   const navigation = useNavigation<RootStack>();
 
   const handleHabit = async (habit: HabitReq, id?: number) => {
@@ -29,6 +29,7 @@ export const useHabit = () => {
     } catch (error) {
       console.error(error);
     } finally {
+      dispatch(close());
       setLoading(false);
     }
   };
@@ -43,8 +44,7 @@ export const useHabit = () => {
     } catch (error) {
       console.error(error);
     } finally {
-      setModalVisible(false);
-      setHabitId(undefined);
+      dispatch(close());
       setLoading(false);
     }
   };
@@ -70,12 +70,8 @@ export const useHabit = () => {
 
   return {
     loading,
-    modalVisible,
     habits,
     navigation,
-    habitId,
-    setHabitId,
-    setModalVisible,
     handleHabit,
     loadHabits,
     handleDelete,

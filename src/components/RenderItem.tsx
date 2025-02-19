@@ -1,13 +1,28 @@
-import { Text, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { Habit } from '../../core/domain/entities/habit.entity';
 import { ListStyles, TextStyles } from '../assets/styles';
 import { CustomIcon } from './Icon';
 import { isCompleted } from '../utils/calcs/isCompleted';
+import { useHabit, useProgress } from '../hooks';
+import { useDispatch } from 'react-redux';
+import { AppDispatch } from '../redux/store/store';
+import { open } from '../redux/reducers/visibility-slice';
 
-export const ItemContent = ({ item }: { item: Habit }) => {
+export const RenderItem = ({ item }: { item: Habit }) => {
+  const { loadHabits } = useHabit();
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { addProgress } = useProgress();
+
   return (
-    <>
+    <TouchableOpacity
+      style={ListStyles.item}
+      onLongPress={() => {
+        addProgress(item.id);
+        loadHabits();
+      }}
+      onPress={() => dispatch(open(item.id))}>
       <View style={ListStyles.left}>
         <Text style={ListStyles.title}>{item.name}</Text>
         <Text style={ListStyles.description}>
@@ -34,6 +49,6 @@ export const ItemContent = ({ item }: { item: Habit }) => {
           )}
         </View>
       </View>
-    </>
+    </TouchableOpacity>
   );
 };

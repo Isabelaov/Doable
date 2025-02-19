@@ -1,32 +1,26 @@
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text } from 'react-native';
 import React from 'react';
 import { LogoutButton } from '../components/LogOutButton';
 import {
   ButtonStyles,
   ContainerStyles,
-  ListStyles,
   ModalStyles,
   TextStyles,
 } from '../assets/styles';
 import { colors } from '../assets/colors';
-import { AddButton, ItemContent, Loading } from '../components';
+import { AddButton, Loading, RenderItem } from '../components';
 import HabitModal from '../components/HabitModal';
 import { useHabit } from '../hooks/useHabit';
 import { FlatList, GestureHandlerRootView } from 'react-native-gesture-handler';
-import { useProgress } from '../hooks';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../redux/store/store';
+import { open } from '../redux/reducers/visibility-slice';
 
 export default function HomeScreen() {
-  const {
-    habits,
-    loading,
-    modalVisible,
-    habitId,
-    setModalVisible,
-    setHabitId,
-    loadHabits,
-  } = useHabit();
-
-  const { addProgress } = useProgress();
+  const { habits, loading } = useHabit();
+  const visible = useSelector((state: RootState) => state.visibility.visible);
+  const habitId = useSelector((state: RootState) => state.visibility.habitId);
+  const dispatch = useDispatch<AppDispatch>();
 
   return (
     <GestureHandlerRootView style={ModalStyles.containerWithModal}>
@@ -42,39 +36,22 @@ export default function HomeScreen() {
         <>
           <FlatList
             data={habits}
+            extraData={habits}
             keyExtractor={item => item.id.toString()}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={ListStyles.item}
-                onLongPress={() => {
-                  addProgress(item.id);
-                  loadHabits();
-                }}
-                onPress={() => {
-                  setModalVisible(true);
-                  setHabitId(item.id);
-                }}>
-                <ItemContent item={item} />
-              </TouchableOpacity>
-            )}
+            renderItem={({ item }) => <RenderItem item={item} />}
           />
 
           <AddButton
             color={colors.primary}
             style={ButtonStyles('rgba(0,0,0,0.1)').addButton}
             onPress={() => {
-              setModalVisible(true);
+              dispatch(open());
             }}
           />
         </>
       )}
 
-      <HabitModal
-        visible={modalVisible}
-        setVisible={setModalVisible}
-        id={habitId}
-        setHabitId={setHabitId}
-      />
+      <HabitModal visible={visible} id={habitId} />
     </GestureHandlerRootView>
   );
 }
