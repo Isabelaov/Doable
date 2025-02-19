@@ -16,7 +16,7 @@ import parseTime from '../utils/parsing/parseTime';
 
 export type HabitModalProps = ModalProps & {
   setVisible: React.Dispatch<React.SetStateAction<boolean>>;
-  id?: number | undefined;
+  id?: number;
   setHabitId: React.Dispatch<React.SetStateAction<number | undefined>>;
 };
 
@@ -35,8 +35,9 @@ export default function HabitModal({
       transparent
       animationType="slide"
       onRequestClose={() => {
-        setVisible(false);
         setHabitId(undefined);
+        setVisible(false);
+        console.log('request closed :3');
         return;
       }}>
       <View style={ModalStyles.modalContainer}>
@@ -64,6 +65,7 @@ export default function HabitModal({
                   handleHabit(values, id);
                   setHabitId(undefined);
                   setVisible(false);
+                  return;
                 }}
                 initialValues={{
                   name: habit?.name || '',
@@ -116,7 +118,12 @@ export default function HabitModal({
 
                       {id ? (
                         <Button
-                          onPress={() => handleDelete(id)}
+                          onPress={() => {
+                            handleDelete(id);
+                            setHabitId(undefined);
+                            setVisible(false);
+                            return;
+                          }}
                           backgroundPrimary={false}
                           text="Delete"
                           disabled={loading}

@@ -6,8 +6,6 @@ import { CustomIcon } from './Icon';
 import { isCompleted } from '../utils/calcs/isCompleted';
 
 export const ItemContent = ({ item }: { item: Habit }) => {
-  console.log('item:', { ...item });
-
   return (
     <>
       <View style={ListStyles.left}>

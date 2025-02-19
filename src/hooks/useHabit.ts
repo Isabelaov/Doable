@@ -30,8 +30,22 @@ export const useHabit = () => {
       console.error(error);
     } finally {
       setLoading(false);
-      setHabitId(undefined);
+    }
+  };
+
+  const handleDelete = async (id: number): Promise<void> => {
+    try {
+      setLoading(true);
+
+      await HabitController.delete(id);
+
+      await loadHabits();
+    } catch (error) {
+      console.error(error);
+    } finally {
       setModalVisible(false);
+      setHabitId(undefined);
+      setLoading(false);
     }
   };
 
@@ -53,20 +67,6 @@ export const useHabit = () => {
   useEffect(() => {
     loadHabits();
   }, [loadHabits]);
-
-  const handleDelete = async (id: number): Promise<void> => {
-    try {
-      setLoading(true);
-      await HabitController.delete(id);
-      await loadHabits();
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setHabitId(undefined);
-      setLoading(false);
-      setModalVisible(false);
-    }
-  };
 
   return {
     loading,
