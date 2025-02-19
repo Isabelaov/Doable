@@ -25,7 +25,7 @@ export function initDB() {
                   description TEXT,
                   frequency TEXT NOT NULL,
                   reminder_time TEXT NOT NULL,
-                  created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+                  created_at TEXT NOT NULL
                   )`,
             [],
             () => console.log('Habits table created'),
@@ -39,7 +39,7 @@ export function initDB() {
             `CREATE TABLE IF NOT EXISTS progress (
               id INTEGER PRIMARY KEY,
               habit_id INTEGER NOT NULL,
-              date DATETIME DEFAULT CURRENT_TIMESTAMP,
+              date TEXT NOT NULL,
               FOREIGN KEY (habit_id) REFERENCES habits(id) ON DELETE CASCADE
             )`,
             [],

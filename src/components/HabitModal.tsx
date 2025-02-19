@@ -30,16 +30,7 @@ export default function HabitModal({
   const habit = habits.find(h => h.id === id);
 
   return (
-    <Modal
-      visible={visible}
-      transparent
-      animationType="slide"
-      onRequestClose={() => {
-        setHabitId(undefined);
-        setVisible(false);
-        console.log('request closed :3');
-        return;
-      }}>
+    <Modal visible={visible} transparent animationType="slide">
       <View style={ModalStyles.modalContainer}>
         <View style={ModalStyles.modalContent}>
           {loading ? (

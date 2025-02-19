@@ -16,8 +16,14 @@ export class HabitRepositoryImp implements HabitRepository {
     return new Promise<void>((resolve, reject) => {
       this.database!.transaction((tx: Transaction) => {
         tx.executeSql(
-          'INSERT INTO habits (name, description, frequency, reminder_time) VALUES ( ?, ?, ?, ?)',
-          [data.name, data.description, data.frequency, data.reminderTime],
+          'INSERT INTO habits (name, description, frequency, reminder_time, created_at) VALUES ( ?, ?, ?, ?, ?)',
+          [
+            data.name,
+            data.description,
+            data.frequency,
+            data.reminderTime,
+            String(new Date()),
+          ],
           (_: Transaction) => {
             resolve();
           },

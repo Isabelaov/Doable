@@ -19,8 +19,8 @@ export class ProgressRepositoryImp implements ProgressRepository {
     return new Promise<void>((resolve, reject) => {
       this.database!.transaction((tx: Transaction) => {
         tx.executeSql(
-          'INSERT INTO progress (habit_id) VALUES (?)',
-          [data.habitId],
+          'INSERT INTO progress (habit_id, date) VALUES (?, ?)',
+          [data.habitId, String(new Date())],
           (_: Transaction) => {
             resolve();
           },
