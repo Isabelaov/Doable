@@ -14,7 +14,7 @@ import { useHabit } from '../hooks/useHabit';
 import { FlatList, GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../redux/store/store';
-import { open } from '../redux/reducers/visibility-slice';
+import { open } from '../redux/reducers/modal-slice';
 
 export default function HomeScreen() {
   const { habits, loading } = useHabit();

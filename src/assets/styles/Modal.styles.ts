@@ -21,4 +21,11 @@ export const ModalStyles = StyleSheet.create({
     padding: 10,
     borderRadius: 15,
   },
+  calendarContent: {
+    padding: 15,
+    backgroundColor: 'white',
+    borderWidth: 2,
+    borderColor: colors.calendar,
+    borderRadius: 15,
+  },
 });

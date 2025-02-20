@@ -7,7 +7,7 @@ import { isCompleted } from '../utils/calcs/isCompleted';
 import { useHabit, useProgress } from '../hooks';
 import { useDispatch } from 'react-redux';
 import { AppDispatch } from '../redux/store/store';
-import { open } from '../redux/reducers/visibility-slice';
+import { open } from '../redux/reducers/modal-slice';
 
 export const RenderItem = ({ item }: { item: Habit }) => {
   const { loadHabits } = useHabit();

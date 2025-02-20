@@ -16,9 +16,14 @@ export const ContainerStyles = StyleSheet.create({
   bySide: {
     display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+  },
+  singleCentered: {
+    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    alignContent: 'space-between',
     width: '100%',
   },
   next: {
@@ -28,6 +33,9 @@ export const ContainerStyles = StyleSheet.create({
     marginVertical: 10,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  marginHorizontal: {
+    marginHorizontal: 10,
   },
 
   buttonEnd: {

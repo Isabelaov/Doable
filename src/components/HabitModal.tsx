@@ -1,8 +1,15 @@
-import { View, Text, ModalProps, Modal } from 'react-native';
+import { View, Text, ModalProps, Modal, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { Field, Formik } from 'formik';
 import { useHabit } from '../hooks/useHabit';
-import { FrequencyPicker, Input, Loading, Button, TimePicker } from '.';
+import {
+  FrequencyPicker,
+  Input,
+  Loading,
+  Button,
+  TimePicker,
+  CalendarModal,
+} from '.';
 import {
   ModalStyles,
   TextStyles,
@@ -15,7 +22,10 @@ import CancelButton from './CancelButton';
 import parseTime from '../utils/parsing/parseTime';
 import { AppDispatch } from '../redux/store/store';
 import { useDispatch } from 'react-redux';
-import { close } from '../redux/reducers/visibility-slice';
+import { close } from '../redux/reducers/modal-slice';
+import { CustomIcon } from './Icon';
+import { colors } from '../assets/colors';
+import { openCalendar } from '../redux/reducers/calendar-slice';
 
 export type HabitModalProps = ModalProps & {
   id?: number;
@@ -27,6 +37,7 @@ export default function HabitModal({
 }: HabitModalProps): React.JSX.Element {
   const { loading, handleDelete, handleHabit, habits } = useHabit();
   const dispatch = useDispatch<AppDispatch>();
+
   const habit = habits.find(h => h.id === id);
 
   return (
@@ -85,7 +96,28 @@ export default function HabitModal({
                       }
                     />
 
-                    <Field name="reminderTime" component={TimePicker} />
+                    <View
+                      style={
+                        id
+                          ? ContainerStyles.bySide
+                          : ContainerStyles.singleCentered
+                      }>
+                      <Field name="reminderTime" component={TimePicker} />
+
+                      {id ? (
+                        <TouchableOpacity
+                          onPress={() => dispatch(openCalendar())}
+                          style={ContainerStyles.marginHorizontal}>
+                          <CustomIcon
+                            name="calendar"
+                            family="Entypo"
+                            color={colors.secondary}
+                          />
+                        </TouchableOpacity>
+                      ) : (
+                        <></>
+                      )}
+                    </View>
 
                     <FrequencyPicker
                       onBlur={handleBlur('frequency')}
@@ -93,7 +125,12 @@ export default function HabitModal({
                       onValueChange={handleChange('frequency')}
                     />
 
-                    <View style={ContainerStyles.bySide}>
+                    <View
+                      style={
+                        id
+                          ? ContainerStyles.bySide
+                          : ContainerStyles.singleCentered
+                      }>
                       <Button
                         onPress={() => handleSubmit()}
                         text="Save"
@@ -120,6 +157,7 @@ export default function HabitModal({
               </Formik>
             </>
           )}
+          <CalendarModal habit={habit} />
         </View>
       </View>
     </Modal>
