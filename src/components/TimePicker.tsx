@@ -29,7 +29,7 @@ export function TimePicker({ field, form }: TimePickerFieldProps) {
   };
 
   return (
-    <View>
+    <View style={ContainerStyles.marginHorizontal}>
       <TouchableOpacity
         onPress={() => setShowPicker(true)}
         style={ContainerStyles.next}>

@@ -6,7 +6,7 @@ import { HabitController } from '../../core/infrastructure/controllers/habit.con
 import { HabitReq } from '../../core/domain/request/habit.request';
 import { RootStack } from '../navigation/rootStack';
 import { useNavigation } from '@react-navigation/native';
-import { close } from '../redux/reducers/visibility-slice';
+import { close } from '../redux/reducers/modal-slice';
 
 export const useHabit = () => {
   const [loading, setLoading] = useState(false);

@@ -5,7 +5,7 @@ const initialState: { habitId: number | undefined; visible: boolean } = {
   visible: false,
 };
 
-const visibilitySlice = createSlice({
+const modalSlice = createSlice({
   name: 'modal',
   initialState,
   reducers: {
@@ -20,5 +20,5 @@ const visibilitySlice = createSlice({
   },
 });
 
-export const { open, close } = visibilitySlice.actions;
-export default visibilitySlice.reducer;
+export const { open, close } = modalSlice.actions;
+export default modalSlice.reducer;

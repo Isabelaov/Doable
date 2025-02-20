@@ -26,4 +26,10 @@ export const ButtonStyles = (backgroundColor = colors.primary) =>
       right: 0,
       top: 0,
     },
+    cancelCalendar: {
+      alignSelf: 'flex-end',
+      position: 'absolute',
+      top: 5,
+      right: 5,
+    },
   });

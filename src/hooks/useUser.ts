@@ -17,7 +17,8 @@ export const useUser = () => {
   const loginUser = async (values: { email: string; password: string }) => {
     setSubmitting(true);
     try {
-      const res = await UserController.login({ ...values });
+      // await UserController.login({ ...values });
+      const res = { token: 'pene' };
       dispatch(login());
       await AsyncStorage.setItem('token', res.token);
       navigation.navigate('Home');

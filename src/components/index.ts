@@ -8,3 +8,5 @@ export * from './Anchor';
 export * from './TimePicker';
 export * from './CancelButton';
 export * from './RenderItem';
+export * from './Calendar';
+export * from './XButton';
