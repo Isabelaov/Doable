@@ -16,22 +16,24 @@ import Zocial from 'react-native-vector-icons/Zocial';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
+export type FamilyType =
+  | 'FontAwesome'
+  | 'Ionicons'
+  | 'MaterialIcons'
+  | 'Entypo'
+  | 'Feather'
+  | 'AntDesign'
+  | 'EvilIcons'
+  | 'Fontisto'
+  | 'Foundation'
+  | 'MaterialCommunityIcons'
+  | 'SimpleLineIcons'
+  | 'Zocial'
+  | 'FontAwesome6'
+  | 'FontAwesome5';
+
 export type CustomIconProps = IconProps & {
-  family:
-    | 'FontAwesome'
-    | 'Ionicons'
-    | 'MaterialIcons'
-    | 'Entypo'
-    | 'Feather'
-    | 'AntDesign'
-    | 'EvilIcons'
-    | 'Fontisto'
-    | 'Foundation'
-    | 'MaterialCommunityIcons'
-    | 'SimpleLineIcons'
-    | 'Zocial'
-    | 'FontAwesome6'
-    | 'FontAwesome5';
+  family: FamilyType;
   name: string;
 };
 

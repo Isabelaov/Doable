@@ -9,6 +9,7 @@ import {
   Button,
   TimePicker,
   CalendarModal,
+  IconButton,
 } from '.';
 import {
   ModalStyles,
@@ -18,7 +19,6 @@ import {
 } from '../assets/styles';
 import habitValidationSchema from '../utils/validation/habit.validation';
 import { Frequencies } from '../../core/enums/frequency.enum';
-import CancelButton from './CancelButton';
 import parseTime from '../utils/parsing/parseTime';
 import { AppDispatch } from '../redux/store/store';
 import { useDispatch } from 'react-redux';
@@ -48,7 +48,9 @@ export default function HabitModal({
             <Loading />
           ) : (
             <>
-              <CancelButton
+              <IconButton
+                family="MaterialIcons"
+                name="cancel"
                 style={ButtonStyles().cancelButton}
                 onPress={() => dispatch(close())}
               />
