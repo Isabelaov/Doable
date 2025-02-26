@@ -10,6 +10,7 @@ import HomeScreen from '../screens/HomeScreen';
 import { AppDispatch, RootState } from '../redux/store/store';
 import { login } from '../redux/reducers/auth-slice';
 import { Loading } from '../components';
+import ProfileScreen from '../screens/ProfileScreen';
 
 const Stack = createNativeStackNavigator<RootStack>();
 
@@ -53,6 +54,12 @@ export const Navigator = () => {
         <Stack.Screen
           name="Home"
           component={HomeScreen}
+          options={{ headerShown: false }}
+        />
+
+        <Stack.Screen
+          name="Profile"
+          component={ProfileScreen}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>

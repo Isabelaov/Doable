@@ -18,4 +18,16 @@ export const FormStyles = StyleSheet.create({
     marginVertical: 10,
     color: '#000',
   },
+  registerContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignContent: 'space-between',
+    margin: 10,
+  },
+  updateContainer: {
+    flex: 1,
+    flexDirection: 'column',
+    margin: 15,
+  },
 });

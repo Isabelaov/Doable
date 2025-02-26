@@ -1,25 +1,26 @@
 import { TouchableOpacityProps, TouchableOpacity } from 'react-native';
 import React from 'react';
-import { CustomIcon } from './Icon';
 import { colors } from '../assets/colors';
+import { CustomIcon, FamilyType } from './Icon';
 
 type Props = TouchableOpacityProps & {
   color?: string;
+  family: FamilyType;
+  name: string;
+  size?: number;
 };
 
-export default function CancelButton({
+export function IconButton({
   disabled = false,
-  color = colors.secondary,
+  family,
+  name,
+  size,
+  color = colors.primary,
   ...rest
 }: Props) {
   return (
     <TouchableOpacity disabled={disabled} {...rest}>
-      <CustomIcon
-        family="MaterialIcons"
-        name="cancel"
-        size={30}
-        color={color}
-      />
+      <CustomIcon family={family} name={name} size={size || 30} color={color} />
     </TouchableOpacity>
   );
 }
