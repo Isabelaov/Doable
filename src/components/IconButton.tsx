@@ -1,9 +1,4 @@
-import {
-  View,
-  Text,
-  TouchableOpacityProps,
-  TouchableOpacity,
-} from 'react-native';
+import { TouchableOpacityProps, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { colors } from '../assets/colors';
 import { CustomIcon, FamilyType } from './Icon';

@@ -2,7 +2,7 @@ import { BACKEND_URL } from '@env';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { UserRepository } from '../../domain/repositories/user.repository';
-import { User } from '../../domain/entities/user.entity';
+import { RegisterReq } from '../../domain/request/user.request';
 
 export class UserRepositoryImp implements UserRepository {
   private instance: AxiosInstance;
@@ -38,12 +38,12 @@ export class UserRepositoryImp implements UserRepository {
     );
   }
 
-  public async register(data: any) {
+  public async register(data: RegisterReq) {
     const response: AxiosResponse<any> = await this.instance.post('user', data);
     return response.data;
   }
 
-  public async login(data: any) {
+  public async login(data: Omit<RegisterReq, 'name'>) {
     const response: AxiosResponse<any> = await this.instance.post(
       'auth/login',
       data,
@@ -56,6 +56,14 @@ export class UserRepositoryImp implements UserRepository {
     const response: AxiosResponse<any> = await this.instance.get('user', {
       headers: { Authorization: `Bearer ${token}` },
     });
+    return response.data;
+  }
+
+  public async update(data: Partial<RegisterReq>, id: number) {
+    const response: AxiosResponse<any> = await this.instance.patch(
+      `/user/${id}`,
+      data,
+    );
     return response.data;
   }
 }

@@ -26,16 +26,17 @@ export default function HomeScreen() {
 
   return (
     <GestureHandlerRootView style={ModalStyles.containerWithModal}>
-      <View style={ContainerStyles.logOutContainer}>
+      <View>
         <IconButton
           family="Ionicons"
           name="person"
           color={colors.secondary}
+          style={ContainerStyles.logOutContainer}
           onPress={() => navigation.navigate('Profile')}
         />
-      </View>
 
-      <Text style={TextStyles.title}>Your Habits</Text>
+        <Text style={TextStyles.title}>Your Habits</Text>
+      </View>
 
       {loading ? (
         <Loading />

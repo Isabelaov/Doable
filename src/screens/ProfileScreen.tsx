@@ -2,13 +2,16 @@ import { View } from 'react-native';
 import React, { useEffect } from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { useUser } from '../hooks';
-import { Button, UserForm } from '../components';
+import { Button, Loading, UserForm } from '../components';
 import { ContainerStyles, FormStyles } from '../assets/styles';
 import { CustomIcon } from '../components/Icon';
 import { colors } from '../assets/colors';
+import { useSelector } from 'react-redux';
+import { RootState } from '../redux/store/store';
 
 export default function ProfileScreen() {
-  const { user, getUser } = useUser();
+  const { getUser, submitting } = useUser();
+  const user = useSelector((state: RootState) => state.auth.user);
 
   useEffect(() => {
     if (!user) {
@@ -28,7 +31,7 @@ export default function ProfileScreen() {
       </View>
 
       <View style={ContainerStyles.marginVertical}>
-        <UserForm user={user} />
+        {submitting ? <Loading /> : <UserForm />}
       </View>
 
       <View style={ContainerStyles.bySide}>

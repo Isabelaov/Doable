@@ -2,7 +2,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import React from 'react';
 import { Text, View } from 'react-native';
 import { Formik } from 'formik';
-import { ContainerStyles, TextStyles } from '../assets/styles';
+import { ContainerStyles, FormStyles, TextStyles } from '../assets/styles';
 import { Input, Button } from '../components';
 import { RootStack } from '../navigation/rootStack';
 import { loginValidationSchema } from '../utils/validation/login.validation';
@@ -18,7 +18,7 @@ export const LoginScreen = ({ navigation }: Props) => {
   const { loginUser, submitting } = useUser();
 
   return (
-    <View style={ContainerStyles.formContainer}>
+    <View style={FormStyles.registerContainer}>
       <Text style={TextStyles.title}>
         Welcome <Text style={TextStyles.titleSecondary}>Back!</Text>
       </Text>
